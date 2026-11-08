@@ -12,7 +12,7 @@ Win Work feels like a CRM for tenders. Bids are written in the client's own Word
 6. **Get better in layers.** The app works from the tender alone; each extra piece of company data visibly improves the bid.
 7. **Deadlines first.** Every screen shows what is due next and what is blocking it.
 
-## Initial customer and lean product boundary
+## Initial customer and focused product boundary
 
 Win Work starts with **Saudi electrical contractors bidding on equipment-heavy government and utility tenders**. Typical work includes cables, switchgear, transformers, substations and related electrical works. The first users are small bid teams that still coordinate tender documents, supplier prices and company evidence through Word, Excel, email and shared folders.
 
@@ -22,23 +22,23 @@ The first product has one promise:
 
 The first product is not a general proposal tool, a tender-discovery marketplace or a CRM for every type of contractor. All examples, templates, rules, terminology and tests are for this electrical-contractor workflow until it is proven with paying customers.
 
-### Lean MVP user journey
+### MVP user journey
 
 1. **Upload the tender pack:** the bid manager uploads the tender booklet, bill of quantities and buyer forms.
 2. **Confirm what was extracted:** Win Work shows requirements, deadlines, priced lines and required documents. A person corrects or confirms them before drafting starts.
-3. **Add proof and prices:** the user uploads approved company evidence and supplier quotes. The MVP accepts manual uploads; mailbox and drive automation come later.
+3. **Add proof and prices:** the user uploads approved company evidence and supplier quotes or connects the chosen mailbox and shared drive. Win Work drafts quote requests, reads supplier replies and keeps quote revisions linked to the tender; a person sends messages and approves prices.
 4. **Check the bid:** Win Work links evidence to requirements, checks certificate dates, flags local-content and mandatory-product gaps, and compares supplier quote lines.
 5. **Draft selected answers:** the user chooses which technical answers to draft. Every factual claim points to an exact source passage; unsupported points remain visible gaps.
-6. **Create the submission package:** Win Work produces the confirmed requirements matrix, priced schedule, selected draft answers, missing-items list and Etimad-oriented submission checklist for human review.
+6. **Create and control the submission package:** Win Work produces the confirmed requirements matrix, priced schedule, selected draft answers, missing-items list and Etimad-oriented submission checklist. Shared-folder versions are tracked, and approval is tied to the exact file version reviewed.
 
 ### MVP surfaces
 
-The lean MVP has four product surfaces rather than the full twenty-one-screen application:
+The MVP has four main product surfaces rather than the full twenty-one-screen application:
 
 1. **Tenders:** a simple list ordered by submission deadline, with status and blockers.
-2. **Tender workspace:** Summary, Requirements, Pricing and Package tabs on one tender record.
+2. **Tender workspace:** Summary, Requirements, Quotes and pricing, and Package tabs on one tender record, including supplier threads and quote revisions.
 3. **Evidence library:** approved projects, certificates, policies, people and product datasheets used by the current tender.
-4. **Review and export:** unresolved gaps, source checks, price approval and downloadable submission files.
+4. **Review and export:** unresolved gaps, source checks, price approval, document versions and downloadable submission files.
 
 The full screen catalogue below remains the long-term product design. Screens not required by these four surfaces are post-MVP.
 
@@ -367,7 +367,7 @@ Four layers sit inside Win Work: clients, an API gateway, core services and data
 
 Each agent job (intake, draft, check-in) runs in its own isolated sandbox, so one client's files and credentials never share a machine process with another's.
 
-1. **Lean MVP:** bounded parsing, checking and drafting jobs run from a Postgres queue in separate Cloud Run job executions.
+1. **MVP:** bounded parsing, checking, quote-reading, drafting and file-check-in jobs run from a Postgres queue in separate Cloud Run job executions.
 2. **Agentic phase:** Temporal coordinates multi-day workflows only after timers, approvals and recovery outgrow the queue.
 3. **Scale:** GKE Agent Sandbox provides one gVisor-isolated sandbox per job when isolation or volume requires it.
 4. **Density later:** Agent Substrate may sit on top when idle agents become a measured cost problem.
@@ -461,7 +461,7 @@ Prompts appear inside the bid view at the moment data would improve the current 
 
 Each prompt shows the gain ("+18% bid strength") and a **Not now** option.
 
-## Lean MVP and post-MVP build order
+## MVP and post-MVP build order
 
 The product grows toward the complete screen catalogue without changing customer type. Every stage continues to serve Saudi electrical contractors bidding on equipment-heavy government and utility tenders.
 
@@ -474,7 +474,7 @@ The product grows toward the complete screen catalogue without changing customer
 
 **Exit gate:** at least two contractors pay for the package, use it on a live tender and say they would purchase it again.
 
-### Phase 1: lean MVP
+### Phase 1: MVP — submission package and workflow automation
 
 - Build the four MVP surfaces: Tenders, Tender workspace, Evidence library, and Review and export.
 - Support direct upload of PDF, DOCX and XLSX tender files, supplier quotes and company evidence.
@@ -482,33 +482,30 @@ The product grows toward the complete screen catalogue without changing customer
 - Provide electrical-sector and Saudi local-content checks, selected-answer drafting with exact source passages, visible gaps and human price approval.
 - Export a requirements matrix, priced schedule, draft DOCX and submission checklist. The customer remains responsible for final Word formatting and Etimad upload.
 - Use Arabic and English from the start, including mixed right-to-left and left-to-right content in the tested export templates.
-
-**Explicitly not in the lean MVP:** history analytics, dashboards, Chat/Plan/Auto modes, automatic supplier email reading, shared-folder check-in, departments, briefs, tender discovery, Chrome extension, MCP, ERP/CRM integrations, map view, mobile PWA and a Word add-in.
-
-**Exit gate:** three paying contractors complete at least five live tenders; the exported package is usable without founder reconstruction; every factual draft claim is either supported by an exact passage or marked for review; and the team knows the time and model cost per tender.
-
-### Phase 2: workflow automation
-
-- Add S7 Quotes, one mail connector and one drive connector based on pilot usage.
+- Include S7 Quotes, one mail connector and one drive connector based on pilot usage.
 - Create quote-request drafts, read supplier replies, compare revisions and feed approved prices into the schedule.
 - Add shared-folder versions, read-only bid view and approval tied to an exact file version.
+- Add Excel/Sheets price write-back for the chosen price file.
 - Add S12 Outcomes so wins, losses and evaluator feedback can be recorded.
 
-**Exit gate:** most supplier quotes and bid versions for pilot tenders are captured without manual re-entry, with no silent price or version mismatches.
+**Explicitly not in the MVP:** history analytics, dashboards, Chat/Plan/Auto modes, departments, scheduled briefs, tender discovery, Chrome extension, MCP, ERP/CRM integrations, map view, mobile PWA, WhatsApp Business API and a Word add-in.
 
-### Phase 3: team and reusable knowledge
+**Exit gate:** three paying contractors complete at least five live tenders; the exported package is usable without founder reconstruction; every factual draft claim is supported by an exact passage or marked for review; most supplier quotes and bid versions are captured without manual re-entry; there are no silent price or approved-version mismatches; and the team knows the time and model cost per tender.
+
+### Phase 2: team and reusable knowledge
 
 - Add the fuller S13 Company brain with approval, superseded and restricted states for evidence.
 - Add S18 Departments, assignments, reminders, reviewer links and S2 Today.
 - Add packs for the electrical products and tender types seen in paid customer work.
 - Add history import and S19 Insights only after enough clean outcomes exist to produce useful statistics.
+- Add daily and weekly briefs after the underlying workflow data is reliable.
 
 **Exit gate:** the product supports the complete bid team on repeated tenders and demonstrably reduces preparation and review time.
 
-### Phase 4: agentic full product
+### Phase 3: agentic full product
 
 - Add Chat, then Plan, and only then Auto mode for workflows that have measured accuracy and safe approval gates.
-- Add daily and weekly briefs, Excel/Sheets automation, form filling, the Etimad Chrome extension and the supplier directory.
+- Add form filling, the Etimad Chrome extension, WhatsApp Business API and the supplier directory.
 - Add the public API, MCP server and requested business-system connectors after repeated customer demand.
 - Add mobile review, Word side panel, reports and map views only when usage evidence justifies them.
 
@@ -519,5 +516,5 @@ The product grows toward the complete screen catalogue without changing customer
 **Open questions**
 
 - Which electrical tender subtype repeats most across the first pilots: supply and installation, maintenance, or project/EPC work?
-- Which file cloud do pilot clients use, Microsoft 365 or Google Workspace? Build only that mail-and-drive connector in Phase 2.
+- Which file cloud do pilot clients use, Microsoft 365 or Google Workspace? Build only that mail-and-drive connector in the MVP.
 - Which two or three Arabic and bilingual Word/Excel template patterns cover most pilot submissions?

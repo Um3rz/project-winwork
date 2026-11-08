@@ -4,15 +4,15 @@
 
 Win Work starts as a focused submission-package product for **Saudi electrical contractors bidding on equipment-heavy government and utility tenders**. It turns tender requirements, supplier prices, Saudi local-content rules and approved company evidence into a checked package for human review and Etimad submission.
 
-The complete agentic product described in this plan remains the destination, but it is no longer the MVP. Automation, connectors, Insights, departments and Auto mode are added only after the narrow workflow works repeatedly for paying electrical contractors.
+The complete agentic product described in this plan remains the destination, but it is no longer the MVP. Insights, departments and Auto mode are added only after the focused tender-and-supplier workflow works repeatedly for paying electrical contractors.
 
 - **One initial customer:** Saudi electrical contractors working on cables, switchgear, transformers, substations and related electrical works.
 - **One MVP outcome:** a confirmed requirements matrix, checked prices, compliance and evidence gaps, selected drafted answers and a submission checklist.
-- **Lean delivery:** start with paid concierge bids and direct file uploads; build connectors only after the workflow repeats.
+- **MVP delivery:** start with paid concierge bids, then build the complete tender workflow with direct uploads, one mail connector, one drive connector and Excel/Sheets price write-back.
 - **One region and language pair:** Dammam hosting, Arabic and English, including mixed right-to-left and left-to-right documents.
 - **Expansion boundary:** later stages deepen this customer's workflow. Other contractor types, general proposal writing and new countries are outside the roadmap until this segment is repeatable and profitable.
 
-## Lean MVP
+## MVP
 
 ### Inputs and output
 
@@ -20,7 +20,7 @@ The complete agentic product described in this plan remains the destination, but
 | --- | --- |
 | Tender booklet and appendices | Direct PDF or DOCX upload; extract requirements, dates, scoring rules and required documents |
 | Bill of quantities or price schedule | Direct XLSX or PDF upload; extract priced lines and preserve the original file |
-| Supplier prices | Upload quote PDFs, spreadsheets or email exports; a person confirms matched lines and revisions |
+| Supplier prices | Upload quote files or sync them from the chosen mailbox; Win Work links threads and revisions, and a person confirms matched lines and final prices |
 | Company evidence | Upload approved projects, certificates, policies, CVs and product datasheets into a small evidence library |
 | Saudi rules | Versioned electrical-sector rules, required documents, local-content checks and mandatory-product references with official sources |
 | Output | Confirmed requirements matrix, checked priced schedule, evidence and compliance gaps, selected draft answers, source report and Etimad-oriented submission checklist |
@@ -31,27 +31,31 @@ The system never submits a tender, sends supplier communication or silently chan
 
 1. Create a tender and upload the tender files.
 2. Parse the files and show requirements, deadlines, priced lines and required documents for correction and confirmation.
-3. Upload company evidence and supplier quotes; match them to requirements and bill-of-quantity lines.
-4. Run certificate-expiry, product-specification, local-content and missing-document checks.
-5. Draft only the answers the user selects, using exact supporting passages and visible unsupported gaps.
-6. Approve prices and export the submission package for final formatting and Etimad upload by the contractor.
+3. Connect the chosen mailbox and shared drive, or upload files directly; link supplier threads, quotes and revisions to the tender.
+4. Draft quote requests and chasers for a person to send, read replies and match quote lines to the bill of quantities.
+5. Run certificate-expiry, product-specification, local-content and missing-document checks.
+6. Draft only the answers the user selects, using exact supporting passages and visible unsupported gaps.
+7. Approve prices, write them to the chosen Excel/Sheets file and read totals back into the tender.
+8. Track shared-folder document versions, tie approval to an exact file hash and export the submission package for Etimad upload by the contractor.
+9. Record the final submitted, won, lost or withdrawn outcome and any evaluator feedback.
 
-### Lean MVP stack
+### MVP stack
 
 | Area | Choice |
 | --- | --- |
 | Hosting | One Google Cloud project in Dammam: Cloud Run, Cloud SQL Postgres with pgvector and Cloud Storage |
 | App | Next.js web app and FastAPI backend; four surfaces: Tenders, Tender workspace, Evidence library, Review and export |
-| Jobs | A simple Postgres-backed job queue for parsing, extraction, checks and drafting; no multi-day autonomous workflow |
+| Jobs | A Postgres-backed queue for parsing, extraction, checks, drafting, supplier-reply reading, scheduled chasers and file check-ins; no autonomous tender agent |
 | Documents | Docling and Arabic OCR for reading; openpyxl for spreadsheets; docxtpl/python-docx for a small set of tested exports |
 | AI | Pydantic-validated extraction and drafting steps behind LiteLLM; no general tender agent or Auto mode |
 | Evidence | Hybrid search over approved tenant-scoped evidence; drafts store exact passage references, not only document names |
-| Safety | Tenant isolation, encrypted storage, audit events, malware scanning, human confirmation and no send or submit capability |
-| Operations | Automated deploys, database backups with restore tests, failed-job alerts, connector-free support and model-cost tracking per tender |
+| Connectors | One provider pair chosen from pilot usage: Microsoft 365 mail plus OneDrive/SharePoint, or Gmail plus Google Drive; Excel/Sheets price write-back from the same ecosystem |
+| Safety | Tenant isolation, encrypted OAuth tokens, egress proxy, audit events, malware scanning, human confirmation and no send or submit capability |
+| Operations | Automated deploys, database backups with restore tests, failed-job and expired-token alerts, webhook polling fallback and model-cost tracking per tender |
 
 ### Explicit non-goals
 
-The lean MVP does not include history import, dashboards, Chat/Plan/Auto modes, mail or drive synchronization, automatic quote requests, departments, scheduled briefs, Chrome or Word add-ins, buyer-form automation, MCP, ERP/CRM connections, mobile apps, map views, tender discovery or expansion outside Saudi electrical contractors.
+The MVP does not include history analytics, dashboards, Chat/Plan/Auto modes, departments, scheduled briefs, tender discovery, Chrome or Word add-ins, buyer-form automation, MCP, ERP/CRM connections, mobile apps, map views, WhatsApp Business API or expansion outside Saudi electrical contractors. It creates email drafts but never sends them.
 
 ### MVP acceptance and stop condition
 
@@ -62,6 +66,9 @@ The MVP is complete when:
 - The package contains the confirmed requirements matrix, approved price schedule, gap report, selected answer drafts and submission checklist.
 - Every factual draft claim is linked to an exact supporting passage or is visibly marked for review.
 - No supplier price enters the final schedule without human confirmation, and quote revisions remain traceable.
+- The chosen mailbox and shared drive are connected; most supplier quotes, replies and bid-file versions are captured without manual re-entry.
+- Approval is tied to the exact reviewed file version, and reconciliation tests show no silent price or approved-version mismatch.
+- Approved prices write to the chosen Excel/Sheets file and totals read back correctly.
 - Arabic, English and mixed-direction exports work on the limited template set agreed with pilots.
 - A package is usable without founders rebuilding it manually, and time, human-review effort and model cost per tender are known.
 
@@ -69,7 +76,7 @@ Once these conditions pass, stop adding MVP scope and move to the post-MVP stage
 
 ## Post-MVP target: full Saudi agentic product
 
-The full product covers the bid in four agent stages in this order: selection, pricing, compliance, bid. A tender agent moves each tender through them automatically and stops where a person must decide. These stages are introduced gradually after the lean MVP, not shipped together as the first release.
+The full product covers the bid in four agent stages in this order: selection, pricing, compliance, bid. A tender agent moves each tender through them automatically and stops where a person must decide. These stages are introduced gradually after the MVP, not shipped together as the first release.
 
 &#91;embedded content: full Saudi product pipeline · 4 agent stages, approval gates\]
 
@@ -181,7 +188,7 @@ Real profit needs accounting data (an ERP connection or Excel import); until the
 
 - **Chat agent:** Pydantic AI with tools for evidence search and **predefined metric queries**; no free-form SQL, so numbers stay correct and row-level security holds. Answers can include a chart.
 - **Metric layer:** metrics defined once in Python over SQL views (win rate, margin, response rate, pipeline value, …) and used by chat, dashboards, briefs and the report alike.
-- **Briefs:** scheduled jobs on the queue; daily (deadlines, quotes received, approvals waiting, expiring certificates, new matching tenders) and weekly (pipeline, results, supplier response, what to fix); delivered in the app and by email after Phase 3, WhatsApp later.
+- **Briefs:** scheduled jobs on the queue; daily (deadlines, quotes received, approvals waiting, expiring certificates, new matching tenders) and weekly (pipeline, results, supplier response, what to fix); delivered in the app and by email after Phase 2, WhatsApp later.
 - **Dashboards:** Next.js with Recharts or Tremor, reading the metric layer.
 
 ### Packaging by product stage (prices to test)
@@ -189,14 +196,13 @@ Real profit needs accounting data (an ERP connection or Excel import); until the
 | Offer | Includes | Available |
 | --- | --- | --- |
 | Concierge package | Founders and electrical bid expert produce the checked package with internal tools | Phase 0 |
-| Submission package | Lean MVP upload, confirmed requirements, quote and evidence checks, selected drafting and package export; priced per tender | Phase 1 |
-| Workflow | Mail/drive automation, quote workflow, document versions and outcomes | Phase 2 |
-| Team and Insights | Departments, reusable knowledge, history metrics, chat and briefs | Phase 3 |
-| Agentic bids | Plan and Auto modes for proven selection, pricing, compliance and bid steps | Phase 4 |
+| Tender workflow MVP | Uploads, mail/drive automation, confirmed requirements, supplier quote workflow, pricing write-back, evidence checks, drafting, file versions, outcomes and package export; priced per tender | Phase 1 |
+| Team and Insights | Departments, reusable knowledge, history metrics, chat and briefs | Phase 2 |
+| Agentic bids | Plan and Auto modes for proven selection, pricing, compliance and bid steps | Phase 3 |
 
 ## Tech stack
 
-This is the target stack for the full product. The lean MVP uses only the rows needed for its bounded upload-to-package path; later components are introduced at their roadmap gate. Langflow and n8n stay for quick experiments only.
+This is the target stack for the full product. The MVP uses the rows needed for the connected tender-to-package workflow; later components are introduced at their roadmap gate. Langflow and n8n stay for quick experiments only.
 
 | Layer | Choice | Why |
 | --- | --- | --- |
@@ -206,7 +212,7 @@ This is the target stack for the full product. The lean MVP uses only the rows n
 | API | FastAPI (Python), the only backend | All AI and document tools live in Python |
 | Web to API link | OpenAPI schema → generated TypeScript client | No hand-written API calls |
 | Agents | Pydantic AI (code-first) | Typed outputs (answer, sources, blanks), testable, versioned in git |
-| Workflows | Postgres queue first; Temporal in Phase 4 if needed | Multi-day timers, approvals and crash recovery are added only after the bounded MVP workflow proves demand |
+| Workflows | Postgres queue first; Temporal in Phase 3 if needed | Multi-day autonomous orchestration is added only after the MVP workflow proves demand |
 | Database | Cloud SQL Postgres in Dammam, pgvector, full-text search | One Saudi data plane for the committed roadmap |
 | Graph | Postgres edge tables | Enough for years; no separate graph database |
 | Auth | Better Auth (inside the app, data in our Postgres), SSO plugin later | Login data stays in-region |
@@ -240,11 +246,11 @@ Every agent step (intake, quotes, draft, check-in, learn) runs in its own isolat
 
 &#91;embedded content: agent job path · 1 sandbox, 3 outbound links\]
 
-In the full agentic phase, the tender agent starts a job, an isolated execution runs the Pydantic AI step, and traffic leaves through the model gateway, results API or egress proxy. The lean MVP has no mail or drive tokens and runs bounded Cloud Run jobs from the Postgres queue; warm-pool sandbox claiming is a later GKE concern.
+In the full agentic phase, the tender agent starts a job and an isolated execution runs the Pydantic AI step. In the MVP, bounded Cloud Run jobs run from the Postgres queue; mail and drive tokens stay in the secrets store and are added only by the egress proxy. Warm-pool sandbox claiming remains a later GKE concern.
 
 | Phase | When | Runtime | Why |
 | --- | --- | --- | --- |
-| Lean MVP | First pilots | Bounded jobs on a Postgres queue in Cloud Run, one job per execution | Simple to run with two people and no long-lived autonomous agent |
+| MVP | First pilots | Bounded jobs on a Postgres queue in Cloud Run, one job per execution; scheduled quote chasers and polling are queue jobs | Connected workflow without a long-lived autonomous tender agent |
 | Scale | Tens of clients, many jobs a day | GKE Agent Sandbox: one gVisor-isolated sandbox per job, claimed from a warm pool, default-deny network policy | Stable (v1.0 since August 2026, generally available on GKE); claims usually in about 200 ms |
 | Density | Many long-lived, mostly idle agents (e.g. one watching each tender's mailbox) | Agent Substrate on top of Agent Sandbox: snapshots idle agents and packs many onto few machines | Pre-1.0 and in the CNCF Sandbox since October 2026; adopt only when idle agents cost real money |
 
@@ -334,7 +340,7 @@ Source: [Introducing System One Models & Jev, TypeSafe AI](https://typesafe.ai/b
 
 ## Integrations
 
-After the upload-based lean MVP, Win Work connects from the server to the client's own accounts. Nothing is installed inside Word or Outlook in the first connector phase.
+The MVP connects from the server to one mail-and-drive provider pair selected from pilot usage. Nothing is installed inside Word or Outlook.
 
 | Integration | Through | Permissions asked | Used for |
 | --- | --- | --- | --- |
@@ -355,20 +361,22 @@ After the upload-based lean MVP, Win Work connects from the server to the client
 
 Everything from outside systems maps into the same brain entities (a CRM account becomes a Buyer, an ERP vendor becomes a Supplier, an HR employee becomes a Person), so a new system adds data instead of a new silo.
 
-**Lean MVP: manual exchange that works on day one**
+**MVP exchange and connections**
 
 - Direct PDF, DOCX, XLSX and CSV upload for tenders, quotes and company evidence.
 - Downloadable DOCX, XLSX and CSV package outputs.
 - Mapping previews and human confirmation before imported prices or facts are accepted.
-- No mailbox, shared-folder or business-system authorization.
+- One mailbox and drive connection: Microsoft 365 with OneDrive/SharePoint, or Gmail with Google Drive.
+- Supplier-thread linking, quote-request and chaser drafts, reply reading, quote revisions and chosen-folder file check-ins.
+- Excel/Sheets price write-back within the selected provider ecosystem.
+- No CRM, ERP, HR or project-system authorization.
 
 **Post-MVP, in this order**
 
-1. **One mail and one drive connector** selected from paid pilot usage in Phase 2.
-2. **Public REST API and webhooks** when electrical contractors request repeatable integration.
-3. **Win Work MCP server** after the public authorization model is proven.
-4. **Zapier, Make or a native CRM/ERP connector** only when three to five paying electrical contractors request the same system.
-5. **Unified API providers** only after verifying that all relevant processing and support meet the approved Saudi boundary.
+1. **Public REST API and webhooks** when electrical contractors request repeatable integration.
+2. **Win Work MCP server** after the public authorization model is proven.
+3. **Zapier, Make or a native CRM/ERP connector** only when three to five paying electrical contractors request the same system.
+4. **Unified API providers** only after verifying that all relevant processing and support meet the approved Saudi boundary.
 
 **Rules:** read first; writes are drafts or opportunities that need approval in Win Work; the client's system stays the source of truth (an expired certificate in HR wins over our copy); every synced record is logged.
 
@@ -391,7 +399,7 @@ A standard MCP server lets the client's own AI tools (Copilot, Claude, ChatGPT o
 - **Access:** OAuth sign-in as the user; the server sees only that user's tenant and their role's permissions.
 - **Safety:** mostly read tools; the two write tools never send, submit or overwrite a file; every call lands in the audit log.
 - **Setup:** the client's admin adds the server URL in their AI tool; Win Work shows a one-page guide per tool.
-- **When:** in Phase 4 after the public API and authorization model are proven; it is not pulled forward for a single pilot request.
+- **When:** in Phase 3 after the public API and authorization model are proven; it is not part of the MVP.
 
 ## Security, compliance and regions
 
@@ -417,7 +425,7 @@ One repository, one pipeline and one Saudi production region. Infrastructure mod
 
 - **Repository:** a monorepo with `web` (Next.js), `api` (FastAPI), `agents` (Pydantic AI agents and Temporal workflows), `docs-tools` (parsing and DOCX writing) and `infra` (Terraform).
 - **CI/CD:** GitHub Actions runs tests, the AI evaluation set and type checks on every pull request; preview deployments for the web app; promotion to each region after it passes.
-- **Environments:** local (Docker Compose with Postgres and a fake file/quote inbox), Saudi staging and Saudi production; add Temporal locally only when Phase 4 introduces it.
+- **Environments:** local (Docker Compose with Postgres and a fake file/quote inbox), Saudi staging and Saudi production; add Temporal locally only when Phase 3 introduces it.
 - **Infrastructure as code:** Terraform modules applied to the Saudi staging and production environments.
 - **Observability:**
   - Langfuse traces every agent step (inputs, tools, cost, time).
@@ -428,7 +436,7 @@ One repository, one pipeline and one Saudi production region. Infrastructure mod
 
 ## Build phases, team and risks
 
-&#91;embedded content: build phases · concierge proof, lean MVP, workflow automation, team knowledge, agentic product\]
+&#91;embedded content: build phases · concierge proof, connected MVP, team knowledge, agentic product\]
 
 Each phase has an observable exit gate. A new service, connector or runtime is added only when the next gate requires it.
 
@@ -442,30 +450,24 @@ Each phase has an observable exit gate. A new service, connector or runtime is a
 
 **Exit gate:** at least two contractors pay, use the package on a live tender and commit to using it again. If they do not, change the package before building the application.
 
-### Phase 1: lean MVP
+### Phase 1: MVP — submission package and workflow automation
 
 1. **Core:** tenant, users and simple roles, authentication, storage, audit events, malware scanning, Arabic/English shell, backups and failed-job alerts.
 2. **Tender intake:** upload PDF, DOCX and XLSX; parse requirements, dates, priced lines and required documents; require user confirmation.
 3. **Evidence library:** approved projects, certificates, policies, CVs and product datasheets with provenance, expiry, approval and superseded states.
-4. **Manual quote intake:** upload supplier quote files, map revisions and lines to the bill of quantities, and require price confirmation.
+4. **Quote intake:** upload supplier quote files or receive them through the chosen mailbox; map revisions and lines to the bill of quantities and require price confirmation.
 5. **Checks:** electrical product/specification checks, certificate expiry, Saudi local-content and mandatory-product gaps, missing documents and unanswered requirements.
 6. **Selected drafting:** draft user-selected technical answers with exact supporting passages and visible unsupported gaps.
 7. **Package export:** confirmed requirements matrix, approved priced schedule, draft answers, source report, gap report and submission checklist.
-8. **Measurement:** processing time, human correction time, model/document cost, package completion and user reuse per tender.
+8. **Mail and drive:** connect one provider pair chosen from pilot usage; draft quote requests and chasers; read replies and attachments; watch one shared folder per tender.
+9. **Version control:** preserve quote revisions and bid-file versions, detect changes and tie review approval to an exact file hash.
+10. **Pricing automation:** add package comparison and Excel/Sheets write-back for the electrical bill of quantities, with totals read back to the tender.
+11. **Outcomes:** record submitted, won, lost and withdrawn outcomes plus evaluator feedback.
+12. **Measurement:** processing time, human correction time, model/document cost, package completion and user reuse per tender.
 
-**Exit gate:** the Lean MVP acceptance and stop condition above passes across three paying contractors and at least five live tenders.
+**Exit gate:** the MVP acceptance and stop condition above passes across three paying contractors and at least five live tenders; most quote traffic and document versions are captured without manual re-entry; and reconciliation tests show no silent price or approved-version mismatch.
 
-### Phase 2: workflow automation
-
-1. Build one mail connector and one drive connector chosen from pilot usage.
-2. Draft quote requests and chasers; read replies and attachments; preserve quote revisions and require price approval.
-3. Add shared-folder file versions, change detection and review approval tied to an exact file hash.
-4. Add fuller pricing build-up, package comparison and Excel/Sheets write-back for the electrical bill of quantities.
-5. Record submitted, won, lost and withdrawn outcomes plus evaluator feedback.
-
-**Exit gate:** the majority of pilot quote traffic and document versions are captured without manual re-entry, and reconciliation tests show no silent price or approved-version mismatch.
-
-### Phase 3: team and reusable knowledge
+### Phase 2: team and reusable knowledge
 
 1. Add department assignments, asks, reminders, reviewer links and deadline-focused home screen.
 2. Expand the company brain with controlled automatic ingestion, confirmation queues, role restrictions and deletion/supersession behavior.
@@ -475,15 +477,15 @@ Each phase has an observable exit gate. A new service, connector or runtime is a
 
 **Exit gate:** repeat customers run their whole electrical bid team through Win Work and show a measured reduction in preparation and review time without a higher correction rate.
 
-### Phase 4: agentic full product
+### Phase 3: agentic full product
 
-1. Add the selection, pricing, compliance and bid agents one workflow at a time, comparing each with the measured Phase 3 baseline.
+1. Add the selection, pricing, compliance and bid agents one workflow at a time, comparing each with the measured Phase 2 baseline.
 2. Release Chat first, Plan second and Auto only for steps that meet accuracy, cost and human-override thresholds.
 3. Introduce Temporal only when multi-day timers, approvals and crash recovery outgrow the Postgres queue; introduce GKE Agent Sandbox only when isolation or volume requires it.
 4. Add buyer-form filling, Etimad Chrome extension, WhatsApp Business API, public API, MCP and business-system connectors only after repeated demand from electrical contractors.
 5. Pursue SOC 2 or ISO 27001 when required by the target customers' procurement process.
 
-**Exit gate:** real electrical tenders complete end to end with safe human gates, lower time and correction cost than Phase 3, and no unsupported claim, unapproved price or stale document version silently reaches the package.
+**Exit gate:** real electrical tenders complete end to end with safe human gates, lower time and correction cost than Phase 2, and no unsupported claim, unapproved price or stale document version silently reaches the package.
 
 **Roadmap boundary:** other contractor segments, new countries and a separate Agent-Ready product graph are not post-MVP stages. They require a future strategy decision after the Saudi electrical-contractor product has repeatable acquisition, retention and healthy margins.
 
@@ -492,7 +494,7 @@ Each phase has an observable exit gate. A new service, connector or runtime is a
 - **Founder 1:** product engineering, document pipeline, AI checks and Saudi infrastructure.
 - **Founder 2:** pilot sales, workflow discovery, product design and delivery ownership with the contractors.
 - **First outside help:** a Saudi electrical estimator/bid reviewer who validates bills of quantities, product compliance, local-content checks and Arabic packages.
-- **First hire:** a full-stack or integrations engineer after the lean MVP gate, when connector work begins and revenue can support the role.
+- **First hire:** a full-stack or integrations engineer after the MVP gate as the team and agentic product expand.
 
 ### Risks
 
@@ -503,7 +505,7 @@ Each phase has an observable exit gate. A new service, connector or runtime is a
 | A citation does not support the drafted claim | Store exact passages, check claims individually and route uncertain support to review |
 | Draft files lose the client's Word or Arabic formatting | Limit the first template set; test it in Phase 0; make final formatting a stated customer step |
 | Saudi rules or mandatory-product lists change | Store rules as dated, sourced data; review updates with the electrical bid expert |
-| Admin consent slows Phase 2 connectors | Keep Phase 1 upload-based; build only the connector used by most pilots; provide a security sheet and consent guide |
+| Admin consent blocks the MVP connectors | Keep direct upload as a fallback; build only the provider pair used by most pilots; provide a security sheet and consent guide |
 | Deadline-critical jobs fail | Backups, restore tests, idempotent jobs, failed-job alerts and deadline-aware support exist before live use |
 | Model or telemetry data leaves the approved Saudi boundary | Approve every subprocesser and endpoint; block classified tenders until hosting and contracts are verified |
 | Founders rebuild every package manually | Track intervention per tender; the MVP gate fails if exports require founder reconstruction |
@@ -517,4 +519,4 @@ Each phase has an observable exit gate. A new service, connector or runtime is a
 - Which two or three buyer Word/Excel template patterns cover most pilot submissions?
 - Which model and OCR endpoints can process pilot data inside the approved Saudi boundary?
 - What price per tender covers document/model cost, expert review and support while retaining healthy margin?
-- For Phase 2, do most paying pilots use Microsoft 365 or Google Workspace?
+- For the MVP, do most paying pilots use Microsoft 365 or Google Workspace?
