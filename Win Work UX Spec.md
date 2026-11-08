@@ -33,14 +33,17 @@ The first product is not a general proposal tool, a tender-discovery marketplace
 
 ### MVP surfaces
 
-The MVP has four main product surfaces rather than the full twenty-one-screen application:
+The MVP has seven main product surfaces rather than treating every item in the full catalogue as a separate product:
 
-1. **Tenders:** a simple list ordered by submission deadline, with status and blockers.
-2. **Tender workspace:** Summary, Requirements, Quotes and pricing, and Package tabs on one tender record, including supplier threads and quote revisions.
-3. **Evidence library:** approved projects, certificates, policies, people and product datasheets used by the current tender.
-4. **Review and export:** unresolved gaps, source checks, price approval, document versions and downloadable submission files.
+1. **Today:** deadlines, approvals, missing quotes, expiring certificates and brief actions.
+2. **Tenders:** a deadline-focused list and pipeline with status and blockers.
+3. **Tender workspace:** Summary, Requirements, Quotes and pricing, Bid view and Package tabs, including supplier threads and quote revisions.
+4. **Company brain:** approved projects, certificates, policies, people, products, past bids and prices, with confirmation and access controls.
+5. **Departments and team work:** assignments, asks, reminders, reviewer links and progress across tenders.
+6. **Insights and chat:** confirmed bid-history metrics, sourced findings and questions over company evidence and predefined metrics.
+7. **Review and export:** unresolved gaps, source checks, price approval, document versions and downloadable submission files.
 
-The full screen catalogue below remains the long-term product design. Screens not required by these four surfaces are post-MVP.
+The full screen catalogue below remains the long-term product design. Screens not represented by these seven surfaces are post-MVP.
 
 ## What the UI resembles
 
@@ -474,7 +477,7 @@ The product grows toward the complete screen catalogue without changing customer
 
 **Exit gate:** at least two contractors pay for the package, use it on a live tender and say they would purchase it again.
 
-### Phase 1: MVP — submission package and workflow automation
+### Phase 1: MVP — connected tender, team and intelligence product
 
 - Build the four MVP surfaces: Tenders, Tender workspace, Evidence library, and Review and export.
 - Support direct upload of PDF, DOCX and XLSX tender files, supplier quotes and company evidence.
@@ -487,22 +490,17 @@ The product grows toward the complete screen catalogue without changing customer
 - Add shared-folder versions, read-only bid view and approval tied to an exact file version.
 - Add Excel/Sheets price write-back for the chosen price file.
 - Add S12 Outcomes so wins, losses and evaluator feedback can be recorded.
-
-**Explicitly not in the MVP:** history analytics, dashboards, Chat/Plan/Auto modes, departments, scheduled briefs, tender discovery, Chrome extension, MCP, ERP/CRM integrations, map view, mobile PWA, WhatsApp Business API and a Word add-in.
-
-**Exit gate:** three paying contractors complete at least five live tenders; the exported package is usable without founder reconstruction; every factual draft claim is supported by an exact passage or marked for review; most supplier quotes and bid versions are captured without manual re-entry; there are no silent price or approved-version mismatches; and the team knows the time and model cost per tender.
-
-### Phase 2: team and reusable knowledge
-
 - Add the fuller S13 Company brain with approval, superseded and restricted states for evidence.
 - Add S18 Departments, assignments, reminders, reviewer links and S2 Today.
 - Add packs for the electrical products and tender types seen in paid customer work.
-- Add history import and S19 Insights only after enough clean outcomes exist to produce useful statistics.
+- Add history import, confirmed metrics, S19 Insights and sourced Chat mode.
 - Add daily and weekly briefs after the underlying workflow data is reliable.
 
-**Exit gate:** the product supports the complete bid team on repeated tenders and demonstrably reduces preparation and review time.
+**Explicitly not in the MVP:** Plan and Auto modes, tender discovery, Chrome extension, MCP, ERP/CRM integrations, map view, mobile PWA, WhatsApp Business API, buyer-form automation and a Word add-in.
 
-### Phase 3: agentic full product
+**Exit gate:** three paying contractors complete at least five live tenders; the product supports their complete bid teams; the exported package is usable without founder reconstruction; every factual draft claim is supported by an exact passage or marked for review; most supplier quotes and bid versions are captured without manual re-entry; there are no silent price or approved-version mismatches; Insights and chat use confirmed data with visible sources; briefs and assignments work from the same tender state; and the team knows the time and model cost per tender.
+
+### Phase 2: agentic full product
 
 - Add Chat, then Plan, and only then Auto mode for workflows that have measured accuracy and safe approval gates.
 - Add form filling, the Etimad Chrome extension, WhatsApp Business API and the supplier directory.
