@@ -304,6 +304,58 @@ Every row carries a `tenant_id` and Postgres row-level security enforces it, so 
 - **Chat thread:** questions, answers, sources used and charts returned.
 - **Ingestion event:** item, source, step reached, confidence, what was linked (powers "Added to brain" and the confirm list).
 
+### Company brain storage and ontology
+
+The company brain is a **derived knowledge projection**, not a replacement for the client's mail, drive, HR, ERP or project systems. Those systems remain authoritative for their original records. Win Work stores enough versioned source material and structured brain data to search, cite, audit and rebuild what it derived.
+
+#### Storage responsibilities
+
+| Layer | Stores | Rule |
+| --- | --- | --- |
+| Client source systems | Original mail, files and business records | Remain the source of truth; a newer authoritative record supersedes the brain's current projection |
+| Regional object storage | The exact file or message-attachment version processed by Win Work, plus its fingerprint | Immutable processing snapshot where permissions and retention rules allow it; never presented as a newer source version |
+| Postgres core tables | Tenders, requirements, projects, people, certificates, products, suppliers, quotes, outcomes and permissions | Canonical tenant-scoped entities used by workflows and the UI |
+| Postgres brain tables | Sources, facts, edges, aliases, ingestion events and ontology candidates | Derived, versioned and rebuildable knowledge with provenance and review state |
+| Postgres full-text and pgvector | Searchable chunks and embeddings | Derived indexes only; deleting or restricting a source removes or hides its indexes |
+| Audit log | Ingestion, confirmation, rejection, merge, supersession, access and deletion events | Records what happened without retaining deleted source content unnecessarily |
+
+The MVP keeps these layers in the same regional Postgres and Cloud Storage deployment. Brain data uses a logical `brain` schema; it does not require a second database or a separate graph database.
+
+Suggested logical tables:
+
+- `brain.sources`: connector, source ID, original URL, version, fingerprint, permissions, processing snapshot and sync state.
+- `brain.entities`: canonical tenant entities and their ontology type.
+- `brain.facts`: field or claim, value, source passage or cell, confidence, review state and valid/superseded dates.
+- `brain.edges`: typed relationships with source, confidence and review state.
+- `brain.aliases`: confirmed alternative names for companies, people, products and projects.
+- `brain.chunks`: source text, page or cell location, search text and embedding reference.
+- `brain.ingestion_events`: each parse, match, confirmation, rejection, deletion and rebuild step.
+- `brain.ontology_candidates`: proposed new category, attribute, alias or relationship with examples and approval state.
+
+#### Core ontology and learned extensions
+
+The electrical-tender core ontology is defined and versioned by Win Work. Its initial types are:
+
+- Tender, buyer, requirement, answer and document.
+- Project, person, department, certificate and policy.
+- Product, product specification, manufacturer and mandatory-product status.
+- Supplier, contact, quote request, quote, quote revision, quote line and price approval.
+- Bill-of-quantity line, package, local-content rule, pack rule, outcome and lesson.
+
+Client data may suggest new product categories, electrical specialities, project types, certificate subtypes, aliases, custom attributes or relationships. The model never changes the production schema or ontology directly. It creates an ontology candidate containing the observed labels, example sources, proposed parent or relationship, confidence and affected items. An authorised user approves, merges or rejects it; only approved extensions become available for matching, filters, metrics and drafting.
+
+#### Ingestion and rebuild path
+
+1. Detect a new or changed source item and record its source ID, permissions, version and fingerprint.
+2. Store or reference the exact version processed, then parse text, tables, pages and cells.
+3. Map extracted candidates to the core ontology and existing tenant entities.
+4. Save uncertain matches, conflicting facts and ontology extensions to the confirmation queue.
+5. Promote confirmed facts and relationships into the searchable brain projection.
+6. Recompute only affected search indexes, tender checks, metrics and briefs.
+7. On a newer version, supersede old facts without rewriting their historical use; on deletion or exclusion, remove the source's searchable text, embeddings, derived facts and links.
+
+Every reusable fact or relationship records `tenant_id`, source, exact passage/page/cell, source version, extraction time, confidence, review state, access level, validity dates and supersession state. Drafting, Insights, chat and briefs use confirmed facts by default. Inferred information may be shown for review but cannot silently affect a bid, price or metric.
+
 ## AI layer
 
 The AI never answers from memory: every claim in a bid must point to a client document, and anything without a source becomes a visible blank.
@@ -473,7 +525,7 @@ Each phase has an observable exit gate. A new service, connector or runtime is a
 10. **Pricing automation:** add package comparison and Excel/Sheets write-back for the electrical bill of quantities, with totals read back to the tender.
 11. **Outcomes:** record submitted, won, lost and withdrawn outcomes plus evaluator feedback.
 12. **Team:** add department assignments, asks, reminders, reviewer links and deadline-focused Today screen.
-13. **Company brain:** add controlled automatic ingestion, confirmation queues, role restrictions and deletion/supersession behavior.
+13. **Company brain:** build the source-linked, rebuildable brain projection in the same regional Postgres/object-storage stack; add the versioned core ontology, candidate extensions, confirmation queues, role restrictions and deletion/supersession behavior.
 14. **Electrical packs:** build reusable packs only for electrical products and tender types observed in paid work.
 15. **History and Insights:** import selected history, confirm entity and outcome links, calculate predefined metrics and show sourced dashboards.
 16. **Chat and briefs:** answer evidence and metric questions with sources; send daily and weekly briefs from the same confirmed data.
@@ -509,6 +561,8 @@ Each phase has an observable exit gate. A new service, connector or runtime is a
 | A citation does not support the drafted claim | Store exact passages, check claims individually and route uncertain support to review |
 | Draft files lose the client's Word or Arabic formatting | Limit the first template set; test it in Phase 0; make final formatting a stated customer step |
 | Saudi rules or mandatory-product lists change | Store rules as dated, sourced data; review updates with the electrical bid expert |
+| Learned ontology fragments into duplicate or unstable categories | Keep a versioned core ontology; treat model suggestions as candidates; require authorised merge, approval or rejection |
+| A deleted or restricted source remains in search or metrics | Propagate source permissions and deletions to chunks, embeddings, facts, edges and affected metric rebuilds; test this path |
 | Admin consent blocks the MVP connectors | Keep direct upload as a fallback; build only the provider pair used by most pilots; provide a security sheet and consent guide |
 | Deadline-critical jobs fail | Backups, restore tests, idempotent jobs, failed-job alerts and deadline-aware support exist before live use |
 | Model or telemetry data leaves the approved Saudi boundary | Approve every subprocesser and endpoint; block classified tenders until hosting and contracts are verified |

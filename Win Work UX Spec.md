@@ -260,10 +260,12 @@ Bids are written in the client's own Word template, with Excel for prices; Win W
 - **Brain strength** per section ("References: 4 of 10 recommended") with **Add** prompts.
 - Each item shows where it was used and how bids scored with it.
 - Connected sources (Drive, SharePoint, email) with sync status and folder picker.
+- Every item shows its **original source, source version and brain status:** confirmed, inferred, needs review, restricted or superseded. The original system remains the source of truth.
 
-* **Always on:** anything that enters Win Work (uploads, connected folders, forwarded emails, supplier replies, drafts, final bids, award letters, chat attachments) is added to the brain automatically; each item shows an **Added to brain** note ("linked to Riyadh 132kV project · 2 people · 1 certificate").
-* **Please check** list for uncertain matches only, and a weekly **What the brain learned** panel.
-* **Controls:** exclude a folder, label or file; mark items private (kept for the tender, hidden from search and chat); delete removes the item's facts and links; newer versions supersede older ones.
+* **Always processing, never automatically trusted:** anything that enters Win Work (uploads, connected folders, forwarded emails, supplier replies, drafts, final bids, award letters, chat attachments) is parsed into candidate facts and links. Confirmed information becomes reusable evidence; uncertain information stays out of metrics and drafting until reviewed.
+* **Stable core, learned extensions:** tenders, requirements, projects, people, certificates, products, suppliers, quotes and outcomes use the fixed electrical-tender ontology. New categories, aliases or relationships found in client data appear as ontology suggestions for an admin to approve, merge or reject.
+* **Please check** lists uncertain entity matches, conflicting facts and ontology suggestions, with a weekly **What the brain learned** panel.
+* **Controls:** source permissions carry into the brain; exclude a folder, label or file; mark items restricted; deleting or disconnecting a source removes its searchable text, embeddings, derived facts and links; newer versions supersede rather than silently overwrite older ones.
 
 ### S14 Suppliers
 
@@ -479,7 +481,7 @@ The product grows toward the complete screen catalogue without changing customer
 
 ### Phase 1: MVP — connected tender, team and intelligence product
 
-- Build the four MVP surfaces: Tenders, Tender workspace, Evidence library, and Review and export.
+- Build the seven MVP surfaces: Today, Tenders, Tender workspace, Company brain, Departments, Insights and chat, and Review and export.
 - Support direct upload of PDF, DOCX and XLSX tender files, supplier quotes and company evidence.
 - Extract requirements, deadlines, priced lines and document obligations, but require confirmation before they affect the package.
 - Provide electrical-sector and Saudi local-content checks, selected-answer drafting with exact source passages, visible gaps and human price approval.
@@ -490,7 +492,7 @@ The product grows toward the complete screen catalogue without changing customer
 - Add shared-folder versions, read-only bid view and approval tied to an exact file version.
 - Add Excel/Sheets price write-back for the chosen price file.
 - Add S12 Outcomes so wins, losses and evaluator feedback can be recorded.
-- Add the fuller S13 Company brain with approval, superseded and restricted states for evidence.
+- Add the fuller S13 Company brain as a source-linked, rebuildable projection with approval, inferred, needs-review, restricted and superseded states; use a stable core ontology plus human-approved suggestions from client data.
 - Add S18 Departments, assignments, reminders, reviewer links and S2 Today.
 - Add packs for the electrical products and tender types seen in paid customer work.
 - Add history import, confirmed metrics, S19 Insights and sourced Chat mode.
@@ -502,7 +504,7 @@ The product grows toward the complete screen catalogue without changing customer
 
 ### Phase 2: agentic full product
 
-- Add Chat, then Plan, and only then Auto mode for workflows that have measured accuracy and safe approval gates.
+- Expand Chat with agent tools, then add Plan, and only then Auto mode for workflows that have measured accuracy and safe approval gates.
 - Add form filling, the Etimad Chrome extension, WhatsApp Business API and the supplier directory.
 - Add the public API, MCP server and requested business-system connectors after repeated customer demand.
 - Add mobile review, Word side panel, reports and map views only when usage evidence justifies them.
